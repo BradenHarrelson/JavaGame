@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-public class Objects {
+public class Object {
 
     //x and y coordinate represent the top left corner of the image
     protected Integer x;
@@ -16,9 +16,10 @@ public class Objects {
     private boolean valid; //used to check if object is still on the screen
     protected Image object;
 
-    public Objects(int x, int y) {
+    public Object(int x, int y) {
         this.x = x;
         this.y = y;
+        valid = true;
     }
 
     //objectName will be the name of a picture stored in the folder
@@ -26,6 +27,8 @@ public class Objects {
     protected void loadObject(String objectName){
         ImageIcon objectImage = new ImageIcon(objectName);
         object = objectImage.getImage();
+
+        extractDimensions();
     }
 
     //function can not be called until the object has been loaded

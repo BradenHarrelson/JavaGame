@@ -1,21 +1,22 @@
-public class Asteroid extends Objects {
+public class Asteroid extends Object {
 
-  // private final Integer MAXYSIZE = 400;
+   // private final Integer MAXYSIZE = 400;
 
-  //initially draws it at the x,y coordinate
-  public Asteroid(int x, int y) {
-    super(x, y);
-    initAsteroid();
-  }
+    //initially draws it at the x,y coordinate
+    public Asteroid(int x, int y) {
+        super(x, y);
+        initAsteroid();
+    }
 
-  private void initAsteroid() {
-    loadObject("asteroid.png");
-  }
+    private void initAsteroid() {
 
-  //moves it straight down
-  public void move() {
-    if (y > 400)
-      y = 0;
-    y = y+1;
-  }
+        loadObject("asteroid.png");
+    }
+
+    //moves it straight down
+    public void move() {
+        if (y > 400)
+            y = 0;
+         y = y+1;
+    }
 }

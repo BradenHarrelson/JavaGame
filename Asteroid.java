@@ -1,6 +1,6 @@
-public class Asteroid extends Object {
+public class Asteroid extends Objects {
 
-  private final Integer MAXYSIZE = 300;
+  // private final Integer MAXYSIZE = 400;
 
   //initially draws it at the x,y coordinate
   public Asteroid(int x, int y) {
@@ -9,11 +9,13 @@ public class Asteroid extends Object {
   }
 
   private void initAsteroid() {
-    loadObject("nameoffile.png");
+    loadObject("asteroid.png");
   }
 
   //moves it straight down
   public void move() {
-    y = y-1;
+    if (y > 400)
+      y = 0;
+    y = y+1;
   }
 }

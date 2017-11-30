@@ -1,4 +1,4 @@
-public class Asteroid extends Objects {
+public class Asteroid extends Object {
 
   private final Integer MAXYSIZE = 300;
 

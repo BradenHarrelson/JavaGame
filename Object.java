@@ -1,4 +1,4 @@
-//This is a generalized object class that the spaceship and asteroids will
+i//This is a generalized object class that the spaceship and asteroids will
 //inherit from and extend the functionality. Both the sub classes will have
 //different move operations....
 
@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-public class Objects {
+public class Object {
 
   //x and y coordinate represent the top left corner of the image
   private Integer x;
@@ -16,7 +16,7 @@ public class Objects {
   private boolean valid; //used to check if object is still on the screen
   private Image object;
 
-  public Objects(int x, int y) {
+  public Object(int x, int y) {
     this.x = x;
     this.y = y;
   }

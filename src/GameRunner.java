@@ -8,13 +8,19 @@ public class GameRunner extends JFrame{
     }
 
     private void initGame() {
-        add(new Space());
+        JFrame spaceFrame = new JFrame("Space");
+        JFrame mainFrame = new JFrame("Main Screen");
 
-        setResizable(true);
-        pack();
-        setTitle("Spaceship Game");
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        spaceFrame.add(new MainMenu());
+
+        spaceFrame.add(new Space());
+
+        spaceFrame.setResizable(true);
+        spaceFrame.pack();
+        spaceFrame.setTitle("Spaceship Game");
+        spaceFrame.setLocationRelativeTo(null);
+        spaceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        spaceFrame.setVisible(true);
     }
 
     public static void main(String[] args){
@@ -23,10 +29,12 @@ public class GameRunner extends JFrame{
                 new Runnable() {
                     @Override
                     public void run() {
+                        //would work if we just put these 2 lines but is better
+                        //practice to use a event queue
                         GameRunner runner = new GameRunner();
-                        runner.setVisible(true);
                     }
                 }
         );
+
     }
 }

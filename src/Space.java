@@ -10,10 +10,11 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     private final Integer HEIGHT = 400;
     private ArrayList<Asteroid> asteroids;
     private SpaceShip ship;
-    private Dimension dimension = new Dimension(WIDTH, HEIGHT);
+    private Background background;
+    private Dimension dimension;
     private Timer timer;
-    private boolean gameOver = false;
-    private boolean paused = false;
+    private boolean gameOver;
+    private boolean paused;
 
     private final int[][] pos = {
             {238, 29}, {25, 59}, {580, 89},
@@ -24,24 +25,30 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     };
 
     public Space() {
+
+        gameOver = false;
+        paused = false;
+        dimension = new Dimension(WIDTH, HEIGHT);
         initSpace();
     }
 
-    private void initSpace() {
+        private void initSpace() {
+
         setFocusable(true);
         setBackground(Color.BLACK);
         setPreferredSize(dimension);
         addKeyListener(this);
 
-        initAsteroid();
-        initSpaceship();
+        initBackground();
 
-        timer = new Timer(1, this);
-        timer.start();
+            initAsteroid();
+            initSpaceship();
+
+            timer = new Timer(1, this);
+            timer.start();
     }
 
     private void initAsteroid(){
-
 
         asteroids = new ArrayList<>();
         for (int[] p : pos)
@@ -52,9 +59,15 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         ship = new SpaceShip();
     }
 
+    private void initBackground(){
+        background = new Background();
+    }
+
     @Override
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
+
+        graphics.drawImage(background.getObject(), background.getX(), background.getY(), this);
 
         if (!gameOver) {
             graphics.drawImage(ship.getObject(), ship.getX(), ship.getY(), this);
@@ -62,14 +75,31 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         }
         else {
             pause();
-            //print game over message
+            printGameOver(graphics);
         }
+
         Toolkit.getDefaultToolkit().sync();
+    }
+
+    public boolean isGameOver(){
+        return gameOver;
+    }
+
+    private void printGameOver(Graphics graphics) {
+        String msg = "Game Over";
+        Font small = new Font("Helvetica", Font.BOLD, 34);
+        FontMetrics fm = getFontMetrics(small);
+
+        graphics.setColor(Color.white);
+        graphics.setFont(small);
+        graphics.drawString(msg, (WIDTH - fm.stringWidth(msg)) / 2,
+                HEIGHT / 2);
     }
 
     private void drawAsteroids(Graphics graphics) {
         for(Asteroid a : asteroids) {
-            graphics.drawImage(a.getObject(), a.getX(), a.getY(), this);
+            if (a.isValid())
+                graphics.drawImage(a.getObject(), a.getX(), a.getY(), this);
         }
     }
 
@@ -80,7 +110,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
 
     private void resume()
     {
-        timer.start();
+        timer.restart();
     }
 
     @Override

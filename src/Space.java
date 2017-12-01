@@ -15,6 +15,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     private Timer timer;
     private boolean gameOver;
     private boolean paused;
+    private long score;
 
     private final int[][] pos = {
             {238, 29}, {25, 59}, {580, 89},
@@ -25,7 +26,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     };
 
     public Space() {
-
+    	score = 0;
         gameOver = false;
         paused = false;
         dimension = new Dimension(WIDTH, HEIGHT);
@@ -72,6 +73,8 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         if (!gameOver) {
             graphics.drawImage(ship.getObject(), ship.getX(), ship.getY(), this);
             drawAsteroids(graphics);
+            printScore(graphics, 5, 15, 15);
+            score += 1;
         }
         else {
             pause();
@@ -94,6 +97,8 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         graphics.setFont(small);
         graphics.drawString(msg, (WIDTH - fm.stringWidth(msg)) / 2,
                 HEIGHT / 2);
+        printScore(graphics, (WIDTH - fm.stringWidth(msg)) / 2 + 20,
+        HEIGHT / 2 + 40, 25);
     }
 
     private void drawAsteroids(Graphics graphics) {
@@ -171,6 +176,17 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {
         ship.keyReleased(e);
+    }
+    
+    public void printScore(Graphics graphics, int x, int y, int size) {
+        long msgL = score;
+        String msg = "Score: " + String.valueOf(msgL);
+        Font small = new Font("Helvetica", Font.BOLD, size);
+        FontMetrics fm = getFontMetrics(small);
+
+        graphics.setColor(Color.yellow);
+        graphics.setFont(small);
+        graphics.drawString(msg, x, y);
     }
 
 }

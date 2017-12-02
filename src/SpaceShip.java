@@ -4,14 +4,18 @@ public class SpaceShip extends Object {
 
     private Integer dx;
     private Integer dy;
+    private Integer speed;
 
     public SpaceShip(){
         super(300, 320);
+        speed = 4;
         dx = 0;
         dy = 0;
         initSpaceShip();
 
     }
+
+    public void setSpeed(int speed){ this.speed = speed; }
 
     private void initSpaceShip() {
         loadObject("ship2.png");
@@ -37,19 +41,19 @@ public class SpaceShip extends Object {
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {
-            dx = -2;
+            dx = -speed;
         }
 
         if (key == KeyEvent.VK_RIGHT) {
-            dx = 2;
+            dx = speed;
         }
 
         if (key == KeyEvent.VK_UP) {
-            dy = -2;
+            dy = -speed;
         }
 
         if (key == KeyEvent.VK_DOWN) {
-            dy = 2;
+            dy = speed;
         }
     }
 

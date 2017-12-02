@@ -64,6 +64,6 @@ public class Object {
     //rectangle.intersect(rectangle) to check for collision to be
     //defined in board class
     public Rectangle getBoundingBox() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(x+5, y+5, width-10, height-10);
     }
 }

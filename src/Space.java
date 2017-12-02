@@ -15,7 +15,16 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     private Timer timer;
     private boolean gameOver;
     private boolean paused;
+    private boolean displayHelp;
     private long score;
+    private long boost;
+
+    //JPanel panel = new JPanel();
+
+    private JButton start;
+    private JButton restart;
+    private JButton quit;
+    private JButton help;
 
     private final int[][] pos = {
             {10, -304}, {50, -172}, {100, -29},
@@ -27,14 +36,80 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     };
 
     public Space() {
-    	score = 0;
+        startGame();
+    }
+
+    private  void reStartGame(){
+        clearGame();
+        startGame();
+    }
+
+    private void startGame(){
+        score = 0;
+        displayHelp = false;
         gameOver = false;
         paused = false;
         dimension = new Dimension(WIDTH, HEIGHT);
+        start = new JButton("PLAY");
+        restart = new JButton("PLAY AGAIN");
+        help = new JButton("HELP");
+        quit = new JButton("QUIT");
         initSpace();
+        initButtons();
+        pause();
     }
 
-        private void initSpace() {
+    public void clearGame() {
+
+        remove(quit);
+        remove(help);
+        remove(restart);
+        remove(start);
+    }
+
+    private void initButtons(){
+
+        add(restart);
+        add(start);
+        add(help);
+        add(quit);
+        start.setBackground(Color.green);
+        restart.setBackground(Color.green);
+        help.setBackground(Color.blue);
+        quit.setBackground(Color.red);
+        restart.setVisible(false);
+
+        start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resume();
+                start.setVisible(false);
+                help.setVisible(false);
+                quit.setVisible(false);
+
+            }
+        });
+
+        quit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        restart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restart.setVisible(false);
+                help.setVisible(false);
+                quit.setVisible(false);
+                reStartGame();
+            }
+        });
+
+    }
+
+    private void initSpace() {
 
         setFocusable(true);
         setBackground(Color.BLACK);
@@ -43,11 +118,11 @@ public class Space extends JPanel implements ActionListener, KeyListener{
 
         initBackground();
 
-            initAsteroid();
-            initSpaceship();
+        initAsteroid();
+        initSpaceship();
 
-            timer = new Timer(1, this);
-            timer.start();
+        timer = new Timer(1, this);
+        timer.start();
     }
 
     private void initAsteroid(){
@@ -69,16 +144,23 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
 
+        if(displayHelp)
+            
         graphics.drawImage(background.getObject(), background.getX(), background.getY(), this);
 
         if (!gameOver) {
             graphics.drawImage(ship.getObject(), ship.getX(), ship.getY(), this);
             drawAsteroids(graphics);
             printScore(graphics, 5, 15, 15);
+            if(boost + 200 == score)
+                ship.setSpeed(5);
             score += 1;
         }
         else {
             pause();
+            restart.setVisible(true);
+            help.setVisible(true);
+            quit.setVisible(true);
             printGameOver(graphics);
         }
 
@@ -99,7 +181,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         graphics.drawString(msg, (WIDTH - fm.stringWidth(msg)) / 2,
                 HEIGHT / 2);
         printScore(graphics, (WIDTH - fm.stringWidth(msg)) / 2 + 20,
-        HEIGHT / 2 + 40, 25);
+                HEIGHT / 2 + 40, 25);
     }
 
     private void drawAsteroids(Graphics graphics) {
@@ -122,6 +204,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     @Override
     public void actionPerformed(ActionEvent event){
 
+        requestFocusInWindow();
         updateAsteroid();
         updateShip();
 
@@ -133,10 +216,10 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     private void updateAsteroid(){
         for (Asteroid asteroid : asteroids) {
             if (asteroid.isValid())
-            	asteroid.move();
-            	if (score % 1000 == 0) {
-            		asteroid.upSpeed();
-            	}
+                asteroid.move();
+            if (score % 1000 == 0) {
+                asteroid.upSpeed();
+            }
         }
     }
 
@@ -162,15 +245,19 @@ public class Space extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == 66) {
+            ship.setSpeed(10);
+            boost = score;
+        }
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-           if(!paused) {
-               pause();
-               paused = true;
-           }
-           else {
-               resume();
-               paused = false;
-           }
+            if(!paused) {
+                pause();
+                paused = true;
+            }
+            else {
+                resume();
+                paused = false;
+            }
         }
 
         ship.keyPressed(e);
@@ -181,12 +268,12 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     public void keyReleased(KeyEvent e) {
         ship.keyReleased(e);
     }
-    
+
     public void printScore(Graphics graphics, int x, int y, int size) {
         long msgL = score;
         String msg = "Score: " + String.valueOf(msgL);
         Font small = new Font("Helvetica", Font.BOLD, size);
-        FontMetrics fm = getFontMetrics(small);
+        //FontMetrics fm = getFontMetrics(small);
 
         graphics.setColor(Color.yellow);
         graphics.setFont(small);

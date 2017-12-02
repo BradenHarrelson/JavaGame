@@ -14,49 +14,14 @@ public class GameRunner extends JFrame{
 
     private void initGame() {
 
-        JPanel panel = new JPanel();
-
-        JButton start_game = new JButton("Play");
-        JButton quit = new JButton("Quit");;
-
-        setTitle("Asteroid");
-        setSize(200, 200);
-        panel.setBackground(Color.black);
-
-        panel.add(start_game);
-        panel.add(quit);
-        // And JPanel needs to be added to the JFrame itself!
-        this.getContentPane().add(panel);
-
-        start_game.setBackground(Color.green);
-        quit.setBackground(Color.red);
-
+        //JFrame spaceFrame = new JFrame("Space");
+        add(new Space());
+        setResizable(true);
+        pack();
+        setTitle("Asteroid Runner");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        start_game.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource() instanceof JButton) {
-                    setVisible(false);
-                    JFrame spaceFrame = new JFrame("Space");
-                    spaceFrame.add(new Space());
-                    spaceFrame.setResizable(true);
-                    spaceFrame.pack();
-                    spaceFrame.setTitle("Asteroid");
-                    spaceFrame.setLocationRelativeTo(null);
-                    spaceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    spaceFrame.setVisible(true);
-                }
-            }
-        });
-
-        quit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
 
     }
 

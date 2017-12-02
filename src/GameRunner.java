@@ -14,9 +14,8 @@ public class GameRunner extends JFrame{
 
     private void initGame() {
 
-        //JFrame spaceFrame = new JFrame("Space");
         add(new Space());
-        setResizable(true);
+        setResizable(false);
         pack();
         setTitle("Asteroid Runner");
         setLocationRelativeTo(null);

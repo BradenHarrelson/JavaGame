@@ -11,8 +11,8 @@ public class Object {
     //x and y coordinate represent the top left corner of the image
     protected Integer x;
     protected Integer y;
-    private Integer width;
-    private Integer height;
+    protected Integer width;
+    protected Integer height;
     private boolean valid; //used to check if object is still on the screen
     protected Image object;
 

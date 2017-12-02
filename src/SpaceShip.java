@@ -7,7 +7,7 @@ public class SpaceShip extends Object {
     private Integer speed;
 
     public SpaceShip(){
-        super(300, 320);
+        super(378, 500);
         speed = 4;
         dx = 0;
         dy = 0;
@@ -32,6 +32,13 @@ public class SpaceShip extends Object {
 
         if (y < 1) {
             y = 1;
+        }
+        if (x > 764) {
+            x = 764;
+        }
+
+        if (y > 548) {
+            y = 548;
         }
 
     }

@@ -2,6 +2,7 @@ public class Asteroid extends Object {
 
     private int speed;
     private int initialY;
+    private final Integer HEIGHT = 600;
     //initially draws it at the x,y coordinate
 
     public Asteroid(int x, int y) {
@@ -22,7 +23,7 @@ public class Asteroid extends Object {
 
     //moves it straight down
     public void move() {
-        if (y > 400)
+        if (y > HEIGHT)
             y = initialY;
         y = y + speed;
     }

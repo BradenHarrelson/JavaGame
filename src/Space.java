@@ -63,6 +63,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         remove(help);
         remove(restart);
         remove(start);
+        removeKeyListner(this);
     }
 
     private  void reStartGame(){

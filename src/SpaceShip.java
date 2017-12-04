@@ -6,6 +6,8 @@ public class SpaceShip extends Object {
     private Integer dy;
     private Integer speed;
 
+    //constructs a ship at the given coordinates
+    //dx and dy are the change in x and y
     public SpaceShip(){
         super(378, 500);
         speed = 4;
@@ -15,17 +17,21 @@ public class SpaceShip extends Object {
 
     }
 
+    //decides how fast the ship will go on the press of the arrow keys
     public void setSpeed(int speed){ this.speed = speed; }
 
     private void initSpaceShip() {
         loadObject("ship2.png");
     }
 
+    //moves the object
     public void move() {
 
+        //moves the ship top left coordinate
         x += dx;
         y += dy;
 
+        //the if conditions make sure the ship doesn't go out of the screen
         if (x < 1) {
             x = 1;
         }
@@ -43,6 +49,7 @@ public class SpaceShip extends Object {
 
     }
 
+    //logic based on when key is pressed
     public void keyPressed(KeyEvent e) {
 
         int key = e.getKeyCode();
@@ -64,6 +71,7 @@ public class SpaceShip extends Object {
         }
     }
 
+    //reset speed to 0 when key is released
     public void keyReleased(KeyEvent e) {
         dx = 0;
         dy = 0;

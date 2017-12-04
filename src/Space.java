@@ -14,11 +14,9 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     private StartScreen startScreen;
     private HelpScreen helpScreen;
     private Dimension dimension;
-    private Timer timer;
+    private  Timer timer;
     private boolean gameOver;
     private boolean paused;
-    private boolean displayHelp;
-    private boolean isStartScreen;
     private long score;
     private long boost;
     private JButton start;
@@ -26,6 +24,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
     private JButton quit;
     private JButton help;
 
+    //coordinates of all the initial asteroids
     private final int[][] pos = {
             {10, -304}, {50, -172}, {100, -29},
             {150, -109}, {200, -139}, {250, -139},
@@ -41,10 +40,9 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         startGame();
     }
 
+    //things to be done at the start of the game
     private void startGame(){
         score = 0;
-        isStartScreen = true;
-        displayHelp = false;
         gameOver = false;
         paused = false;
         dimension = new Dimension(WIDTH, HEIGHT);
@@ -52,25 +50,36 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         restart = new JButton("PLAY AGAIN");
         help = new JButton("HELP");
         quit = new JButton("QUIT");
+
         initSpace();
         initButtons();
         pause();
+
+        helpScreen.setValid(false);
+        startScreen.setValid(true);
     }
 
+    //when restarting the game thus function clears the buttons and key listener
+    //otherwise we would end up adding more buttons every time.
+    //if keylistner is not removed but just overwritten it won't read in the keys
+    //properly and give unexpected errors
     private void clearGame() {
 
         remove(quit);
         remove(help);
         remove(restart);
         remove(start);
-        removeKeyListner(this);
+        removeKeyListener(this);
     }
 
+    //play again sequence
     private  void reStartGame(){
         clearGame();
         startGame();
     }
 
+    //initializes the window/pannel and initializes all the objects to be drawn
+    //at the moment or later
     private void initSpace() {
 
         setFocusable(true);
@@ -86,11 +95,21 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         initTimer();
     }
 
+    //range based loop to dynamically create new asteroids at runtime
     private void initAsteroid(){
 
+        int i = 0;
         asteroids = new ArrayList<>();
-        for (int[] p : pos)
+        for (int[] p : pos){
             asteroids.add(new Asteroid(p[0], p[1]));
+            if(i % 3 == 0) {
+                asteroids.get(i).upSpeed();
+                if(i % 6 == 0)
+                    asteroids.get(i).upSpeed();
+            }
+            i = i+1;
+        }
+
     }
 
     private void initStartScreen() { startScreen = new StartScreen(); }
@@ -105,11 +124,14 @@ public class Space extends JPanel implements ActionListener, KeyListener{
 
     private void initMainMenu(){helpScreen = new HelpScreen(); }
 
+    //create a timer, the delay means redraw after that much time(nanoseconds. i think?)
     private void initTimer() {
         timer = new Timer(1, this);
         timer.start();
     }
 
+    //adds the buttons to the panel and sets their properties
+    //defines the action to be performed on click of the button
     private void initButtons(){
 
         add(restart);
@@ -122,11 +144,12 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         quit.setBackground(Color.red);
         restart.setVisible(false);
 
+        //defines what to draw and what not to in all teh buttons
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                displayHelp = false;
-                isStartScreen = false;
+                helpScreen.setValid(false);
+                startScreen.setValid(false);
                 resume();
                 start.setVisible(false);
                 help.setVisible(false);
@@ -138,13 +161,13 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         help.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (displayHelp)
-                    displayHelp = false;
+                if (helpScreen.isValid())
+                    helpScreen.setValid(false);
                 else {
-                    displayHelp = true;
+                    helpScreen.setValid(true);
                     score -= 1;
                 }
-                repaint();
+                repaint(); //calls the paintcomponent function
             }
         });
 
@@ -158,7 +181,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         restart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                displayHelp = false;
+                helpScreen.setValid(false);
                 repaint();
                 restart.setVisible(false);
                 help.setVisible(false);
@@ -167,7 +190,7 @@ public class Space extends JPanel implements ActionListener, KeyListener{
                 start.setVisible(false);
                 help.setVisible(false);
                 quit.setVisible(false);
-                isStartScreen = false;
+                startScreen.setValid(false);
                 resume();
             }
         });
@@ -181,33 +204,36 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         timer.start();
     }
 
+    //this function is called ever time we call the repaint command
+    //it defines what to draw and what not to based on the state of
+    //the game.
     @Override
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
 
-        if(isStartScreen) {
-            if(!displayHelp)
+        if(startScreen.isValid()) {
+            if(!helpScreen.isValid())
                 draw(graphics, startScreen);
             else
                 draw(graphics, helpScreen);
         }
-        else if(displayHelp)
+        else if(helpScreen.isValid())
             draw(graphics, helpScreen);
         else {
-                draw(graphics, background);
+            draw(graphics, background);
 
-                if (!gameOver) {
-                    draw(graphics, ship);
-                    drawAsteroids(graphics);
-                    printScore(graphics, 5, 15, 15);
-                    boostUp();
-                } else {
-                    pause();
-                    restart.setVisible(true);
-                    help.setVisible(true);
-                    quit.setVisible(true);
-                    printGameOver(graphics);
-                }
+            if (!gameOver) {
+                draw(graphics, ship);
+                drawAsteroids(graphics);
+                printScore(graphics, 5, 15, 15);
+                boostUp();
+            } else {
+                pause();
+                restart.setVisible(true);
+                help.setVisible(true);
+                quit.setVisible(true);
+                printGameOver(graphics);
+            }
         }
         Toolkit.getDefaultToolkit().sync();
     }
@@ -229,6 +255,8 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         graphics.drawImage(object.getObject(), object.getX(), object.getY(), this);
     }
 
+    //this function speeds up the asteroids every 1000 points and updates the coordinates
+    //by calling the move command
     private void updateAsteroid(){
         for (Asteroid asteroid : asteroids) {
             if (asteroid.isValid())
@@ -239,11 +267,14 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         }
     }
 
+    //updates the ship coordinates
     private void updateShip(){
         if (ship.isValid())
             ship.move();
     }
 
+    //when the bounding boxes intersect the following asteroid and
+    //ship is destroyed. and hence not redrawn.
     private void collisionDetection()
     {
         for (Asteroid asteroid : asteroids) {
@@ -272,13 +303,14 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         long msgL = score;
         String msg = "Score: " + String.valueOf(msgL);
         Font small = new Font("Helvetica", Font.BOLD, size);
-        //FontMetrics fm = getFontMetrics(small);
 
         graphics.setColor(Color.yellow);
         graphics.setFont(small);
         graphics.drawString(msg, x, y);
     }
 
+    //this function is called based on the timer delay. if we do not set up the
+    //timer the function wont be called.
     @Override
     public void actionPerformed(ActionEvent event){
 
@@ -291,6 +323,8 @@ public class Space extends JPanel implements ActionListener, KeyListener{
         repaint();
     }
 
+    //the following three functions listen to the interrupts by keys and
+    //perform the appropriate action.
     @Override
     public void keyTyped(KeyEvent e) {
     }

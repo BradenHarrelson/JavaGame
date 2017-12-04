@@ -63,6 +63,7 @@ public class Object {
     // calls the extractDimensions function
     //rectangle.intersect(rectangle) to check for collision to be
     //defined in board class
+    //+5 and -10 are to adjust the bounding box and make it more accurate
     public Rectangle getBoundingBox() {
         return new Rectangle(x+5, y+5, width-10, height-10);
     }

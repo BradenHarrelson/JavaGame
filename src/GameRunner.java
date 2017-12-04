@@ -1,12 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GameRunner extends JFrame{
-
-    private JList mylist;
-    private DefaultListModel model;
 
     public GameRunner() {
         initGame();
@@ -14,6 +9,8 @@ public class GameRunner extends JFrame{
 
     private void initGame() {
 
+        //adds the space panel to the frame
+        //sets variables of the frame as appropriate
         add(new Space());
         setResizable(false);
         pack();

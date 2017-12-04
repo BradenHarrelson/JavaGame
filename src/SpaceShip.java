@@ -21,7 +21,7 @@ public class SpaceShip extends Object {
     public void setSpeed(int speed){ this.speed = speed; }
 
     private void initSpaceShip() {
-        loadObject("ship2.png");
+        loadObject("ship3.png");
     }
 
     //moves the object

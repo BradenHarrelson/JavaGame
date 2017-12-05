@@ -65,6 +65,6 @@ public class Object {
     //defined in board class
     //+5 and -10 are to adjust the bounding box and make it more accurate
     public Rectangle getBoundingBox() {
-        return new Rectangle(x+4, y+4, width-9, height-9);
+        return new Rectangle(x+3, y+3, width-8, height-8);
     }
 }

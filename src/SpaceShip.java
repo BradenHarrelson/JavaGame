@@ -21,7 +21,7 @@ public class SpaceShip extends Object {
     public void setSpeed(int speed){ this.speed = speed; }
 
     private void initSpaceShip() {
-        loadObject("ship3.png");
+        loadObject("ship.png");
     }
 
     //moves the object
@@ -73,7 +73,7 @@ public class SpaceShip extends Object {
 
     //reset speed to 0 when key is released
     public void keyReleased(KeyEvent e) {
-         int key = e.getKeyCode();
+        int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {
             dx = 0;
